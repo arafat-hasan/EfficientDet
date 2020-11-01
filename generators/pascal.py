@@ -20,28 +20,30 @@ import numpy as np
 from six import raise_from
 import cv2
 import xml.etree.ElementTree as ET
+import pickle
 
 voc_classes = {
-    'aeroplane': 0,
-    'bicycle': 1,
-    'bird': 2,
-    'boat': 3,
-    'bottle': 4,
-    'bus': 5,
-    'car': 6,
-    'cat': 7,
-    'chair': 8,
-    'cow': 9,
-    'diningtable': 10,
-    'dog': 11,
-    'horse': 12,
-    'motorbike': 13,
-    'person': 14,
-    'pottedplant': 15,
-    'sheep': 16,
-    'sofa': 17,
-    'train': 18,
-    'tvmonitor': 19
+    'ambulance': 0,
+    'auto rickshaw': 1,
+    'bicycle': 2,
+    'bus': 3,
+    'car': 4,
+    'garbagevan': 5,
+    'human hauler': 6,
+    'minibus': 7,
+    'minivan': 8,
+    'motorbike': 9,
+    'pickup': 10,
+    'army vehicle': 11,
+    'policecar': 12,
+    'rickshaw': 13,
+    'scooter': 14,
+    'suv': 15,
+    'taxi': 16,
+    'three wheelers (CNG)': 17,
+    'truck': 18,
+    'van': 19,
+    'wheelbarrow': 20
 }
 
 
@@ -92,7 +94,7 @@ class PascalVocGenerator(Generator):
         self.data_dir = data_dir
         self.set_name = set_name
         self.classes = classes
-        self.image_names = [l.strip().split(None, 1)[0] for l in
+        self.image_names = [l.strip() for l in
                             open(os.path.join(data_dir, 'ImageSets', 'Main', set_name + '.txt')).readlines()]
         self.image_extension = image_extension
         self.skip_truncated = skip_truncated
@@ -155,6 +157,9 @@ class PascalVocGenerator(Generator):
         """
         path = os.path.join(self.data_dir, 'JPEGImages', self.image_names[image_index] + self.image_extension)
         image = cv2.imread(path)
+        if image is None:
+            print("\n### "+path)
+        image = image.astype('uint8')
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         return image
 
