@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import sys
+sys.path.append("..")
+
 from utils.compute_overlap import compute_overlap
 from utils.visualization import draw_detections, draw_annotations
 
@@ -277,14 +280,14 @@ if __name__ == '__main__':
         'phi': phi,
     }
     test_generator = PascalVocGenerator(
-        'datasets/VOC2007',
+        '../datasets/dhaka-ai/voc/',
         'test',
         shuffle_groups=False,
         skip_truncated=False,
         skip_difficult=True,
         **common_args
     )
-    model_path = 'checkpoints/2019-12-03/pascal_05_0.6283_1.1975_0.8029.h5'
+    model_path = '../checkpoints/2020-10-31/pascal_02_0.8296_1.8047.h5'
     input_shape = (test_generator.image_size, test_generator.image_size)
     anchors = test_generator.anchors
     num_classes = test_generator.num_classes()

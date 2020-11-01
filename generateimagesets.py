@@ -2,7 +2,7 @@ import os
 import random
 import glob
 
-trainval_percent = 1
+trainval_percent = 0.95
 train_percent = 0.8
 
 xmlfilepath = 'datasets/dhaka-ai/voc/Annotations'

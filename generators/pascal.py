@@ -159,7 +159,7 @@ class PascalVocGenerator(Generator):
         image = cv2.imread(path)
         if image is None:
             print("\n### "+path)
-        image = image.astype('uint8')
+        # image = image.astype('uint8')
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         return image
 

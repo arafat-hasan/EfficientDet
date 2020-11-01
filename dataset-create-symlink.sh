@@ -51,13 +51,10 @@ done
 rm datasets/dhaka-ai/voc/JPEGImages/231.jpg
 rm datasets/dhaka-ai/voc/Annotations/231.xml
 
-python3 generateimagesets.py
 python3 png2jpg.py
 
-
-# rename JPG jpg datasets/dhaka-ai/voc/JPEGImages/*.JPG
-# rename jpeg jpg datasets/dhaka-ai/voc/JPEGImages/*.jpeg
 
 rename 's/\.JPG$/.jpg/' datasets/dhaka-ai/voc/JPEGImages/*.JPG
 rename 's/\.jpeg$/.jpg/' datasets/dhaka-ai/voc/JPEGImages/*.jpeg
 
+# python3 generateimagesets.py
