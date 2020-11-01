@@ -57,6 +57,6 @@ python3 png2jpg.py
 rename 's/\.JPG$/.jpg/' datasets/dhaka-ai/voc/JPEGImages/*.JPG
 rename 's/\.jpeg$/.jpg/' datasets/dhaka-ai/voc/JPEGImages/*.jpeg
 
-cp ImageSets/Main* datasets/dhaka-ai/voc/ImageSets/Main/
+cp -r ImageSets/Main/* datasets/dhaka-ai/voc/ImageSets/Main/
 
 # python3 generateimagesets.py
