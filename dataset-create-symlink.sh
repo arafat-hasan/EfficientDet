@@ -1,14 +1,19 @@
 #!/bin/bash
 
+# Use: ./dataset-create-symlink.sh "path/to/dhaka-ai/Final Train Dataset"
+# This script creates a dataset made of symlinks in Pascal VOC structure.
+# Train-Val-Test split is also created.
+
+set -e
 
 if [ $# -eq 0 ]
   then
-    echo "No arguments supplied"
+    echo "Supply data dir path"
     exit
 fi
 
-if [ -d datasets/ ]; then
-    rm -r datasets/
+if [ -d datasets/dhaka-ai/voc/ ]; then
+    rm -r datasets/dhaka-ai/voc/
 fi
 
 
@@ -48,15 +53,21 @@ do
     ln -s "$xml"  datasets/dhaka-ai/voc/Annotations
 done
 
-rm datasets/dhaka-ai/voc/JPEGImages/231.jpg
-rm datasets/dhaka-ai/voc/Annotations/231.xml
 
-python3 png2jpg.py
+rm datasets/dhaka-ai/voc/JPEGImages/231.jpg # Corrupted file
+rm datasets/dhaka-ai/voc/Annotations/231.xml    # Corrupted file
+
+python3 png2jpg.py  # Convert all png files to jpg
 
 
-rename 's/\.JPG$/.jpg/' datasets/dhaka-ai/voc/JPEGImages/*.JPG
-rename 's/\.jpeg$/.jpg/' datasets/dhaka-ai/voc/JPEGImages/*.jpeg
+rename JPG jpg datasets/dhaka-ai/voc/JPEGImages/*.JPG || :  # Convert uppercase file ext to lowercase
+rename jpeg jpg datasets/dhaka-ai/voc/JPEGImages/*.jpeg || :
+
+rename 's/\.JPG$/.jpg/' datasets/dhaka-ai/voc/JPEGImages/*.JPG || :
+rename 's/\.jpeg$/.jpg/' datasets/dhaka-ai/voc/JPEGImages/*.jpeg || :
 
 cp -r ImageSets/Main/* datasets/dhaka-ai/voc/ImageSets/Main/
 
-# python3 generateimagesets.py
+# python3 generateimagesets.py    # Create train-test-val split in ImageSets dir
+
+echo "Done"

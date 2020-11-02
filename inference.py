@@ -13,43 +13,42 @@ from utils.draw_boxes import draw_boxes
 def main():
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
-    phi = 1
-    weighted_bifpn = True
-    model_path = 'checkpoints/2020-10-31/pascal_02_0.8296_1.8047.h5'
-    # model_path = 'pascal_05_0.6283_1.1975_0.8029.h5'
+    phi = 3
+    weighted_bifpn = False
+    model_path = 'checkpoints/2020-11-01/pascal_05_0.6392_1.2519.h5'
     image_sizes = (512, 640, 768, 896, 1024, 1280, 1408)
     image_size = image_sizes[phi]
     # coco classes
-    classes = {value['id'] - 1: value['name'] for value in json.load(open('coco_90.json', 'r')).values()}
+    coco_classes = {value['id'] - 1: value['name'] for value in json.load(open('coco_90.json', 'r')).values()}
     coco_num_classes = 90
 
     # Dhaka-ai classes
     voc_classes = {
-        'ambulance': 0,
-        'auto rickshaw': 1,
-        'bicycle': 2,
-        'bus': 3,
-        'car': 4,
-        'garbagevan': 5,
-        'human hauler': 6,
-        'minibus': 7,
-        'minivan': 8,
-        'motorbike': 9,
-        'pickup': 10,
-        'army vehicle': 11,
-        'policecar': 12,
-        'rickshaw': 13,
-        'scooter': 14,
-        'suv': 15,
-        'taxi': 16,
-        'three wheelers (CNG)': 17,
-        'truck': 18,
-        'van': 19,
-        'wheelbarrow': 20
+        0:  'ambulance',
+        1:  'auto rickshaw',
+        2:  'bicycle',
+        3:  'bus',
+        4:  'car',
+        5:  'garbagevan',
+        6:  'human hauler',
+        7:  'minibus',
+        8:  'minivan',
+        9:  'motorbike',
+        10: 'pickup',
+        11: 'army vehicle',
+        12: 'policecar',
+        13: 'rickshaw',
+        14: 'scooter',
+        15: 'suv',
+        16: 'taxi',
+        17: 'three wheelers (CNG)',
+        18: 'truck',
+        19: 'van',
+        20: 'wheelbarrow'
     }
     dhaka_ai_num_classes = 21
 
-    score_threshold = 0.3
+    score_threshold = 0.01
     colors = [np.random.randint(0, 256, 3).tolist() for _ in range(dhaka_ai_num_classes)]
     _, model = efficientdet(phi=phi,
                             weighted_bifpn=weighted_bifpn,
