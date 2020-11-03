@@ -273,7 +273,7 @@ if __name__ == '__main__':
 
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
-    phi = 3
+    phi = 4
     weighted_bifpn = False
     common_args = {
         'batch_size': 1,
@@ -287,7 +287,7 @@ if __name__ == '__main__':
         skip_difficult=True,
         **common_args
     )
-    model_path = '../checkpoints/2020-11-01/pascal_05_0.6392_1.2519.h5'
+    model_path = '../checkpoints/pascal_11_0.5008_0.6651.h5'
     input_shape = (test_generator.image_size, test_generator.image_size)
     anchors = test_generator.anchors
     num_classes = test_generator.num_classes()

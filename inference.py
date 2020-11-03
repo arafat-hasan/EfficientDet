@@ -13,9 +13,9 @@ from utils.draw_boxes import draw_boxes
 def main():
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
-    phi = 3
+    phi = 4
     weighted_bifpn = False
-    model_path = 'checkpoints/2020-11-01/pascal_05_0.6392_1.2519.h5'
+    model_path = 'checkpoints/pascal_11_0.5008_0.6651.h5'
     image_sizes = (512, 640, 768, 896, 1024, 1280, 1408)
     image_size = image_sizes[phi]
     # coco classes
