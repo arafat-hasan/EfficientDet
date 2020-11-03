@@ -15,7 +15,7 @@ def main():
 
     phi = 4
     weighted_bifpn = False
-    model_path = 'checkpoints/pascal_11_0.5008_0.6651.h5'
+    model_path = 'checkpoints/2020-11-03/pascal_20_0.2781_0.5556.h5'
     image_sizes = (512, 640, 768, 896, 1024, 1280, 1408)
     image_size = image_sizes[phi]
     # coco classes
@@ -23,7 +23,7 @@ def main():
     coco_num_classes = 90
 
     # Dhaka-ai classes
-    voc_classes = {
+    dhaka_ai_classes = {
         0:  'ambulance',
         1:  'auto rickshaw',
         2:  'bicycle',
@@ -48,7 +48,7 @@ def main():
     }
     dhaka_ai_num_classes = 21
 
-    score_threshold = 0.01
+    score_threshold = 0.35
     colors = [np.random.randint(0, 256, 3).tolist() for _ in range(dhaka_ai_num_classes)]
     _, model = efficientdet(phi=phi,
                             weighted_bifpn=weighted_bifpn,
@@ -56,7 +56,7 @@ def main():
                             score_threshold=score_threshold)
     model.load_weights(model_path, by_name=True)
 
-    for image_path in glob.glob('datasets/dhaka-ai/voc/JPEGImages/*.jpg'):
+    for image_path in glob.glob('/home/arafat_hasan/Videos/dhaka-ai/Final Train Dataset/*.jpg'):
         image = cv2.imread(image_path)
         src_image = image.copy()
         # BGR -> RGB
@@ -78,7 +78,7 @@ def main():
         boxes = boxes[indices]
         labels = labels[indices]
 
-        draw_boxes(src_image, boxes, scores, labels, colors, voc_classes)
+        draw_boxes(src_image, boxes, scores, labels, colors, dhaka_ai_classes)
 
         cv2.namedWindow('image', cv2.WINDOW_NORMAL)
         cv2.imshow('image', src_image)
