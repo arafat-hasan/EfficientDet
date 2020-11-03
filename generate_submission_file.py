@@ -60,7 +60,7 @@ def main():
         fieldnames = ['image_id', 'class', 'score', 'xmin', 'ymin', 'xmax', 'ymax', 'width', 'height']
         result_file_writer = csv.writer(result_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         result_file_writer.writerow(fieldnames)
-        for image_path in glob.glob('/content/gdrive/My Drive/kaggle/dhaka-ai-dataset/test/*.jpg'):
+        for image_path in glob.glob('/content/gdrive/My Drive/kaggle/dhaka-ai-dataset/test/test/*.jpg'):
             image = cv2.imread(image_path)
             src_image = image.copy()
             # BGR -> RGB
