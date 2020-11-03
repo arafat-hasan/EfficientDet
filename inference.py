@@ -56,7 +56,7 @@ def main():
                             score_threshold=score_threshold)
     model.load_weights(model_path, by_name=True)
 
-    for image_path in glob.glob('/home/arafat_hasan/Videos/dhaka-ai/Final Train Dataset/*.jpg'):
+    for image_path in glob.glob('/home/arafat_hasan/Videos/dhaka-ai/test/*.jpg'):
         image = cv2.imread(image_path)
         src_image = image.copy()
         # BGR -> RGB
