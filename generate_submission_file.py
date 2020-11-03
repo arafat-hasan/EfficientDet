@@ -48,7 +48,7 @@ def main():
     }
     dhaka_ai_num_classes = 21
 
-    score_threshold = 0.45
+    score_threshold = 0.10
     # colors = [np.random.randint(0, 256, 3).tolist() for _ in range(dhaka_ai_num_classes)]
     _, model = efficientdet(phi=phi,
                             weighted_bifpn=weighted_bifpn,
