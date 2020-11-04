@@ -59,7 +59,7 @@ def main(args=None):
     }
     dhaka_ai_num_classes = 21
 
-    score_threshold = 0.15
+    score_threshold = 0.05
     colors = [np.random.randint(0, 256, 3).tolist() for _ in range(dhaka_ai_num_classes)]
     _, model = efficientdet(phi=phi,
                             weighted_bifpn=weighted_bifpn,
@@ -91,7 +91,7 @@ def main(args=None):
 
         
         selected_indices = tf.image.non_max_suppression(
-            boxes, scores, 50, iou_threshold=0.4, score_threshold=0.30)
+            boxes, scores, 80, iou_threshold=0.25, score_threshold=0.30)
         selected_boxes = tf.gather(boxes, selected_indices)
         selected_labels = tf.gather(labels, selected_indices)
         selected_boxes = tf.Session().run(selected_boxes)
