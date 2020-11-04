@@ -287,7 +287,7 @@ if __name__ == '__main__':
         skip_difficult=True,
         **common_args
     )
-    model_path = '../checkpoints/2020-11-03/pascal_20_0.2781_0.5556.h5'
+    model_path = '../checkpoints/2020-11-03/pascal_32_0.1936_0.5726.h5'
     input_shape = (test_generator.image_size, test_generator.image_size)
     anchors = test_generator.anchors
     num_classes = test_generator.num_classes()

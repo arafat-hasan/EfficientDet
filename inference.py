@@ -5,6 +5,8 @@ import os
 import time
 import glob
 
+import  tensorflow as tf
+
 from model import efficientdet
 from utils import preprocess_image, postprocess_boxes
 from utils.draw_boxes import draw_boxes
@@ -15,7 +17,7 @@ def main():
 
     phi = 4
     weighted_bifpn = False
-    model_path = 'checkpoints/2020-11-03/pascal_20_0.2781_0.5556.h5'
+    model_path = 'checkpoints/2020-11-03/pascal_32_0.1936_0.5726.h5'
     image_sizes = (512, 640, 768, 896, 1024, 1280, 1408)
     image_size = image_sizes[phi]
     # coco classes
@@ -48,14 +50,14 @@ def main():
     }
     dhaka_ai_num_classes = 21
 
-    score_threshold = 0.35
+    score_threshold = 0.15
     colors = [np.random.randint(0, 256, 3).tolist() for _ in range(dhaka_ai_num_classes)]
     _, model = efficientdet(phi=phi,
                             weighted_bifpn=weighted_bifpn,
                             num_classes=dhaka_ai_num_classes,
                             score_threshold=score_threshold)
     model.load_weights(model_path, by_name=True)
-
+    
     for image_path in glob.glob('/home/arafat_hasan/Videos/dhaka-ai/test/*.jpg'):
         image = cv2.imread(image_path)
         src_image = image.copy()
@@ -72,13 +74,24 @@ def main():
         boxes = postprocess_boxes(boxes=boxes, scale=scale, height=h, width=w)
 
         # select indices which have a score above the threshold
-        indices = np.where(scores[:] > score_threshold)[0]
+        # indices = np.where(scores[:] > score_threshold)[0]
 
         # select those detections
-        boxes = boxes[indices]
-        labels = labels[indices]
+        # boxes = boxes[indices]
+        # labels = labels[indices]
 
-        draw_boxes(src_image, boxes, scores, labels, colors, dhaka_ai_classes)
+        
+        selected_indices = tf.image.non_max_suppression(
+            boxes, scores, 50, iou_threshold=0.4, score_threshold=0.30)
+        selected_boxes = tf.gather(boxes, selected_indices)
+        selected_labels = tf.gather(labels, selected_indices)
+        selected_boxes = tf.Session().run(selected_boxes)
+        selected_labels = tf.Session().run(selected_labels)
+        # boxes = boxes[selected_indices]
+        # labels = labels[selected_indices]
+
+
+        draw_boxes(src_image, selected_boxes, scores, selected_labels, colors, dhaka_ai_classes)
 
         cv2.namedWindow('image', cv2.WINDOW_NORMAL)
         cv2.imshow('image', src_image)
