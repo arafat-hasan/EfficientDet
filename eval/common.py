@@ -266,7 +266,14 @@ def evaluate(
     return average_precisions
 
 
-if __name__ == '__main__':
+def main(args=None):
+    if len(sys.argv) is 3:
+        model_path = str(sys.argv[1])
+        dataset_path = str(sys.argv[2])
+    else:        
+        print("Pass model path and dataset path in respectively as command line argument")
+        exit()
+
     from generators.pascal import PascalVocGenerator
     from model import efficientdet
     import os
@@ -280,14 +287,14 @@ if __name__ == '__main__':
         'phi': phi,
     }
     test_generator = PascalVocGenerator(
-        '../datasets/dhaka-ai/voc/',
+        dataset_path,
         'test',
         shuffle_groups=False,
         skip_truncated=False,
         skip_difficult=True,
         **common_args
     )
-    model_path = '../checkpoints/2020-11-03/pascal_32_0.1936_0.5726.h5'
+    model_path = model_path
     input_shape = (test_generator.image_size, test_generator.image_size)
     anchors = test_generator.anchors
     num_classes = test_generator.num_classes()
@@ -304,3 +311,6 @@ if __name__ == '__main__':
         precisions.append(average_precision)
     mean_ap = sum(precisions) / sum(x > 0 for x in total_instances)
     print('mAP: {:.4f}'.format(mean_ap))
+
+if __name__ == '__main__':
+    main()

@@ -5,17 +5,26 @@ import os
 import time
 import glob
 import csv
+import sys
+
+import  tensorflow as tf
 
 from model import efficientdet
 from utils import preprocess_image, postprocess_boxes
 
 
-def main():
+def main(args=None):
+    if len(sys.argv) is 3:
+        model_path = str(sys.argv[1])
+        image_data = os.path.join(str(sys.argv[2]), "*.jpg")
+    else:        
+        print("Pass model path and image data path in respectively as command line argument")
+        exit()
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
     phi = 4
     weighted_bifpn = False
-    model_path = 'checkpoints/2020-11-03/pascal_20_0.2781_0.5556.h5'
+    model_path = model_path
     image_sizes = (512, 640, 768, 896, 1024, 1280, 1408)
     image_size = image_sizes[phi]
     # coco classes
@@ -48,7 +57,7 @@ def main():
     }
     dhaka_ai_num_classes = 21
 
-    score_threshold = 0.30
+    score_threshold = 0.15
     # colors = [np.random.randint(0, 256, 3).tolist() for _ in range(dhaka_ai_num_classes)]
     _, model = efficientdet(phi=phi,
                             weighted_bifpn=weighted_bifpn,
@@ -56,11 +65,11 @@ def main():
                             score_threshold=score_threshold)
     model.load_weights(model_path, by_name=True)
 
-    with open('result.csv', mode='w') as result_file:
+    with open('result-{}.csv'.format(time.strftime("%Y%m%d-%H%M%S")), mode='w') as result_file:
         fieldnames = ['image_id', 'class', 'score', 'xmin', 'ymin', 'xmax', 'ymax', 'width', 'height']
         result_file_writer = csv.writer(result_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         result_file_writer.writerow(fieldnames)
-        for image_path in glob.glob('/content/gdrive/My Drive/kaggle/dhaka-ai-dataset/test/test/*.jpg'):
+        for image_path in glob.glob(image_data):
             image = cv2.imread(image_path)
             src_image = image.copy()
             # BGR -> RGB
@@ -78,12 +87,25 @@ def main():
             # select indices which have a score above the threshold
             indices = np.where(scores[:] > score_threshold)[0]
 
+            # select indices which have a score above the threshold
+            # indices = np.where(scores[:] > score_threshold)[0]
+
             # select those detections
-            boxes = boxes[indices]
-            labels = labels[indices]
+            # boxes = boxes[indices]
+            # labels = labels[indices]
+
+            
+            selected_indices = tf.image.non_max_suppression(
+                boxes, scores, 50, iou_threshold=0.4, score_threshold=0.30)
+            selected_boxes = tf.gather(boxes, selected_indices)
+            selected_labels = tf.gather(labels, selected_indices)
+            selected_boxes = tf.Session().run(selected_boxes)
+            selected_labels = tf.Session().run(selected_labels)
+            # boxes = boxes[selected_indices]
+            # labels = labels[selected_indices]
 
             # store_csv(result_file, src_image, boxes, scores, labels, colors, dhaka_ai_classes)
-            for b, l, s in zip(boxes, labels, scores):
+            for b, l, s in zip(selected_boxes, selected_labels, scores):
                 class_id = int(l)
                 class_name = dhaka_ai_classes[class_id]
             

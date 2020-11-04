@@ -4,6 +4,7 @@ import numpy as np
 import os
 import time
 import glob
+import sys
 
 import  tensorflow as tf
 
@@ -12,12 +13,20 @@ from utils import preprocess_image, postprocess_boxes
 from utils.draw_boxes import draw_boxes
 
 
-def main():
+def main(args=None):
+    if len(sys.argv) is 3:
+        model_path = str(sys.argv[1])
+        image_data = os.path.join(str(sys.argv[2]), "*.jpg")
+    else:        
+        print("Pass model path and image data path in respectively as command line argument")
+        exit()
+    
+            
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
     phi = 4
     weighted_bifpn = False
-    model_path = 'checkpoints/2020-11-03/pascal_32_0.1936_0.5726.h5'
+    model_path = model_path
     image_sizes = (512, 640, 768, 896, 1024, 1280, 1408)
     image_size = image_sizes[phi]
     # coco classes
@@ -58,7 +67,7 @@ def main():
                             score_threshold=score_threshold)
     model.load_weights(model_path, by_name=True)
     
-    for image_path in glob.glob('/home/arafat_hasan/Videos/dhaka-ai/test/*.jpg'):
+    for image_path in glob.glob(image_data):
         image = cv2.imread(image_path)
         src_image = image.copy()
         # BGR -> RGB
