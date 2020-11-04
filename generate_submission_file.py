@@ -17,6 +17,8 @@ def main(args=None):
     if len(sys.argv) is 3:
         model_path = str(sys.argv[1])
         image_data = os.path.join(str(sys.argv[2]), "*.jpg")
+        print(model_path)
+        print(image_data)
     else:        
         print("Pass model path and image data path in respectively as command line argument")
         exit()
