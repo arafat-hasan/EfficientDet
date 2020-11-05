@@ -70,8 +70,10 @@ rename 's/\.jpeg$/.jpg/' datasets/dhaka-ai/voc/JPEGImages/*.jpeg || :
 if [ $# -eq 2 ]
   then
     cp -r "$2"/* datasets/dhaka-ai/voc/ImageSets/Main/
+    echo "Image Set Copied"
 else
   python3 generateimagesets.py    # Create train-test-val split in ImageSets dir  
+  echo "Image Set Created"
 fi
 
 
