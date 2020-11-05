@@ -107,7 +107,7 @@ def create_callbacks(training_model, prediction_model, validation_generator, arg
         checkpoint = keras.callbacks.ModelCheckpoint(
             os.path.join(
                 args.snapshot_path,
-                f'{args.dataset_type}_{{epoch+start_epoch:02d}}_{{loss:.4f}}_{{val_loss:.4f}}.h5' if args.compute_val_loss
+                f'{args.dataset_type}_{{epoch+args.start_epoch:02d}}_{{loss:.4f}}_{{val_loss:.4f}}.h5' if args.compute_val_loss
                 else f'{args.dataset_type}_{{epoch:02d}}_{{loss:.4f}}.h5'
             ),
             verbose=1,
