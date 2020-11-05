@@ -107,7 +107,7 @@ def create_callbacks(training_model, prediction_model, validation_generator, arg
         checkpoint = keras.callbacks.ModelCheckpoint(
             os.path.join(
                 args.snapshot_path,
-                f'{args.dataset_type}_{{epoch:02d}}_{{loss:.4f}}_{{val_loss:.4f}}.h5' if args.compute_val_loss
+                f'{args.dataset_type}_{{epoch+start_epoch:02d}}_{{loss:.4f}}_{{val_loss:.4f}}.h5' if args.compute_val_loss
                 else f'{args.dataset_type}_{{epoch:02d}}_{{loss:.4f}}.h5'
             ),
             verbose=1,
@@ -270,6 +270,7 @@ def parse_args(args):
     parser.add_argument('--phi', help='Hyper parameter phi', default=0, type=int, choices=(0, 1, 2, 3, 4, 5, 6))
     parser.add_argument('--gpu', help='Id of the GPU to use (as reported by nvidia-smi).')
     parser.add_argument('--epochs', help='Number of epochs to train.', type=int, default=50)
+    parser.add_argument('--start-epoch', help='Starting epoch for saving weights.', type=int, default=0)
     parser.add_argument('--steps', help='Number of steps per epoch.', type=int, default=10000)
     parser.add_argument('--snapshot-path',
                         help='Path to store snapshots of models during training',

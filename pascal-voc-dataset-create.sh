@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Use: ./dataset-create-symlink.sh "path/to/dhaka-ai/Final Train Dataset"
+# Use: ./dataset-create-symlink.sh "path/to/dhaka-ai/Final Train Dataset" "path/to/copy/ImageSet/Main"
 # This script creates a dataset made of symlinks in Pascal VOC structure.
 # Train-Val-Test split is also created.
 
@@ -66,8 +66,15 @@ rename jpeg jpg datasets/dhaka-ai/voc/JPEGImages/*.jpeg || :
 rename 's/\.JPG$/.jpg/' datasets/dhaka-ai/voc/JPEGImages/*.JPG || :
 rename 's/\.jpeg$/.jpg/' datasets/dhaka-ai/voc/JPEGImages/*.jpeg || :
 
-cp -r ImageSets/Main/* datasets/dhaka-ai/voc/ImageSets/Main/
 
-# python3 generateimagesets.py    # Create train-test-val split in ImageSets dir
+if [ $# -eq 2 ]
+  then
+    cp -r "$2"/* datasets/dhaka-ai/voc/ImageSets/Main/
+else
+  python3 generateimagesets.py    # Create train-test-val split in ImageSets dir  
+fi
+
+
+
 
 echo "Done"
