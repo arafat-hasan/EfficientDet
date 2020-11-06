@@ -156,10 +156,8 @@ class PascalVocGenerator(Generator):
         Load an image at the image_index.
         """
         path = os.path.join(self.data_dir, 'JPEGImages', self.image_names[image_index] + self.image_extension)
-        image = cv2.imread(path)
-        if image is None:
-            print("\n### "+path)
-        # image = image.astype('uint8')
+        image = cv2.imread(path)    
+        assert image is not None, "Image not found in path: "+path
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         return image
 
