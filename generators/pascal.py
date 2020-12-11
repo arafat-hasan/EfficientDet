@@ -22,6 +22,15 @@ import cv2
 import xml.etree.ElementTree as ET
 import pickle
 
+
+
+
+def get_class_names():
+    with open('datasets/ClassNames.txt') as f:
+        content = f.readlines()
+    content = [x.strip() for x in content]
+    return content
+
 voc_classes = {
     'ambulance': 0,
     'auto rickshaw': 1,
